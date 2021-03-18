@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,8 +37,13 @@ public class ImageController {
 						.toString())
 				.collect(Collectors.toList());
 
-
 		model.addAttribute("files", stringss);
+
+		List<Image> stringss1 = imageRepository.findAll().stream()
+
+				.collect(Collectors.toList());
+
+		model.addAttribute("files1", stringss1);
 
 		return "upload";
 	}
@@ -57,17 +61,16 @@ public class ImageController {
 	}
 
 	@PostMapping("/")
-	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes
+	public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("filename") String filename, RedirectAttributes redirectAttributes
 	) throws Exception {
 
 		if (file.getSize() == 0) {
-			System.out.println("test");
 			return "redirect:/";
 		}
 
 		String uuid = UUID.randomUUID().toString();
 
-		String imagePath = this.rootLocation.resolve(uuid + ".jpg").toString();
+		String imagePath = this.rootLocation.resolve(uuid + filename + ".jpg").toString();
 		System.out.println(imagePath);
 		List<Image> stringList = imageRepository.findAll();
 		stringList.add(new Image(imagePath));
@@ -78,35 +81,13 @@ public class ImageController {
 		return "redirect:/";
 	}
 
-	@GetMapping("/find")
-	public String findPhotos(Model model) {
-		return "findphoto";
-	}
-
-	@GetMapping("/search")
-	public String findPhotos(@RequestParam("name") String name, Model model) {
-
-		List<String> images = imageRepository.findAll().stream()
-				.map(image -> this.rootLocation.resolve(image.getName()))
-				.map(path -> MvcUriComponentsBuilder
-						.fromMethodName(ImageController.class, "serveFile", path.getFileName().toString()).build()
-						.toString())
-				.collect(Collectors.toList());
-
-		model.addAttribute("files", images);
-
-
-		return "findphoto";
-
-	}
-
 	@RequestMapping("/delete")
-	public String findPhotos(Principal principal, @RequestParam("text") String text, String string) throws Exception {
+	public String findPhotos(@RequestParam("text") String text) throws Exception {
 
 		text = text.substring(text.lastIndexOf("/"));
 		text = this.rootLocation + text;
 
-		Image image = imageRepository.deleteByName(text);
+		imageRepository.deleteById(imageRepository.findByName(text));
 
 		return "redirect:/";
 

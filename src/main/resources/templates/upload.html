@@ -53,7 +53,7 @@ div.gallery img {
             </tr>
             <tr>
                 <td></td>
-                <input type="text"
+                <input name="filename" type="text" value="File name"
                 />
                 <td><input type="submit" value="Upload"/></td>
             </tr>
@@ -63,13 +63,29 @@ div.gallery img {
 
 <div th:each="file : ${files}">
     <div class="gallery">
-        <a data-toggle="lightbox" th:href="${file}" title="${file}"> <img height="200"
-                                                                          th:src="${file}"/>
+        <a data-toggle="lightbox" th:href="${file}" th:title="*{file}"> <img height="200"
+                                                                             th:src="${file}"/>
         </a>
         <div>
             <form action="/delete" method="POST">
                 <table>
                     <input name="text" readonly="true" th:value="*{file}" type="text"/>
+
+                    <td><input type="submit" value="Delete"/></td>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:each="file : ${files1}">
+    <div class="gallery">
+        <a data-toggle="lightbox" th:href="*{file.name}" th:title="*{file.name}"> <img height="200"
+                                                                                       th:src="*{file.name}"/>
+        </a>
+        <div>
+            <form action="/delete" method="POST">
+                <table>
+                    <input name="text" readonly="true" th:value="*{file.id}" type="text"/>
 
                     <td><input type="submit" value="Delete"/></td>
                 </table>
