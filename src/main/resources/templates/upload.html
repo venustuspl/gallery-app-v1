@@ -1,0 +1,91 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"></meta>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no"
+          name="viewport"></meta>
+    <script src="/jquery-3.1.1.slim.min.js"></script>
+    <script src="/tether.min.js"></script>
+    <script src="/bootstrap.min.js"></script>
+    <script src="/ekko-lightbox.js"></script>
+    <script src="/ekko-lightbox.min.js"></script>
+
+    <style>
+div.gallery {
+	margin: 15px;
+	float: left;
+	width: 250px;
+}
+
+div.gallery img {
+	width: 100%;
+	height: 25%;
+}
+
+    </style>
+
+    <link href="/bootstrap.min.css" rel="stylesheet"></link>
+    <link href="/navbar-top-fixed.css" rel="stylesheet"></link>
+    <link href="/ekko-lightbox.css" rel="stylesheet"></link>
+</head>
+<body>
+
+<nav
+        class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+    <button aria-controls="navbarCollapse" aria-expanded="false"
+            aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"
+            data-target="#navbarCollapse" data-toggle="collapse"
+            type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/">My Photos</a>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+
+
+    </div>
+</nav>
+
+<div>
+    <form action="/" enctype="multipart/form-data" method="POST">
+        <table>
+            <tr>
+                <td>File to upload:</td>
+                <td><input name="file" type="file"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <input type="text"
+                />
+                <td><input type="submit" value="Upload"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div th:each="file : ${files}">
+    <div class="gallery">
+        <a data-toggle="lightbox" th:href="${file}" title="${file}"> <img height="200"
+                                                                          th:src="${file}"/>
+        </a>
+        <div>
+            <form action="/delete" method="POST">
+                <table>
+                    <input name="text" readonly="true" th:value="*{file}" type="text"/>
+
+                    <td><input type="submit" value="Delete"/></td>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script>	$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+	event.preventDefault();
+	$(this).ekkoLightbox({
+                alwaysShowClose: true
+            });
+
+
+	});
+
+</script>
+</body>
+</html>
