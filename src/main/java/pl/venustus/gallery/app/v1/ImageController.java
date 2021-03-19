@@ -44,7 +44,7 @@ public class ImageController {
 
 		model.addAttribute("files1", stringss1);
 
-		return "upload";
+		return "gallery";
 	}
 
 	@GetMapping("/files/{filename:.+}")
@@ -66,8 +66,6 @@ public class ImageController {
 		if (file.getSize() == 0) {
 			return "redirect:/";
 		}
-
-		//String uuid = UUID.randomUUID().toString();
 
 		String imagePath = this.rootLocation.resolve(filename + ".jpg").toString();
 		System.out.println(imagePath);
