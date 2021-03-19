@@ -14,7 +14,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
@@ -68,9 +67,9 @@ public class ImageController {
 			return "redirect:/";
 		}
 
-		String uuid = UUID.randomUUID().toString();
+		//String uuid = UUID.randomUUID().toString();
 
-		String imagePath = this.rootLocation.resolve(uuid + filename + ".jpg").toString();
+		String imagePath = this.rootLocation.resolve(filename + ".jpg").toString();
 		System.out.println(imagePath);
 		List<Image> stringList = imageRepository.findAll();
 		stringList.add(new Image(imagePath));
