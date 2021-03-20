@@ -18,14 +18,15 @@ public class Image {
 	public Image() {
 	}
 
-	public Image(String name) {
+	public Image(String name, String url) {
 		this.name = name;
+		this.url = url;
 	}
 
-	public Image(Long id, String name) {
+	public Image(Long id, String name, String url) {
 		this.id = id;
 		this.name = name;
-
+		this.url = url;
 	}
 
 	public Long getId() {

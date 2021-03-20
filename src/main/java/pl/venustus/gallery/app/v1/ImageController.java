@@ -44,7 +44,7 @@ public class ImageController {
 						.fromMethodName(ImageController.class, "serveFile", this.rootLocation.resolve(i.getName())
 								.getFileName().toString())
 						.build()
-						.toString()))
+						.toString(), i.getUrl()))
 				.collect(Collectors.toList());
 		if (!stringss1.isEmpty())
 			System.out.println(stringss1.get(0).getName());
@@ -76,10 +76,10 @@ public class ImageController {
 		String imagePath = this.rootLocation.resolve(filename + ".jpg").toString();
 		System.out.println(imagePath);
 		List<Image> stringList = imageRepository.findAll();
-		stringList.add(new Image(imagePath));
+		stringList.add(new Image(imagePath, filename));
 		Files.copy(file.getInputStream(), this.rootLocation.resolve(imagePath));
 
-		imageRepository.save(new Image(imagePath));
+		imageRepository.save(new Image(imagePath, filename));
 
 		return "redirect:/";
 	}
