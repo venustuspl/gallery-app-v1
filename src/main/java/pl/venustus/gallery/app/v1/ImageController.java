@@ -40,8 +40,7 @@ public class ImageController {
 		model.addAttribute("files", stringss);
 
 		List<Image> stringss1 = imageRepository.findAll().stream()
-				.map(i -> new Image(this.rootLocation.resolve(i.getName()).toString()))
-				.map(i -> new Image(MvcUriComponentsBuilder
+				.map(i -> new Image(i.getId(), MvcUriComponentsBuilder
 						.fromMethodName(ImageController.class, "serveFile", this.rootLocation.resolve(i.getName())
 								.getFileName().toString())
 						.build()
@@ -86,12 +85,12 @@ public class ImageController {
 	}
 
 	@RequestMapping("/delete")
-	public String findPhotos(@RequestParam("text") String text) throws Exception {
-		System.out.println(text);
-		text = text.substring(text.lastIndexOf("/"));
-		text = this.rootLocation + text;
-
-		//imageRepository.delete(imageRepository.findByName(text));
+	public String findPhotos(@RequestParam("id") Long id) throws Exception {
+//		System.out.println(text);
+//		text = text.substring(text.lastIndexOf("/"));
+//		text = this.rootLocation + text;
+		System.out.println(id);
+		imageRepository.deleteById(id);
 
 		return "redirect:/";
 

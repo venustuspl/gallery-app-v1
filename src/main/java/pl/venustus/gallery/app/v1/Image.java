@@ -13,11 +13,19 @@ public class Image {
 
 	private String name;
 
+	private String url;
+
 	public Image() {
 	}
 
 	public Image(String name) {
 		this.name = name;
+	}
+
+	public Image(Long id, String name) {
+		this.id = id;
+		this.name = name;
+
 	}
 
 	public Long getId() {
@@ -36,8 +44,20 @@ public class Image {
 		this.name = name;
 	}
 
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	@Override
 	public String toString() {
-		return "Image [id=" + id + ", name=" + name + "]";
+		return "Image{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", url='" + url + '\'' +
+				'}';
 	}
 }

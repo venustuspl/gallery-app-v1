@@ -86,8 +86,8 @@ div.gallery img {
         <div>
             <form action="/delete" method="POST">
                 <table>
-                    <input name="text" readonly="true" th:value="*{file.id}" type="text"/>
-
+                    <input name="id" readonly="true" th:value="*{file.id}" type="text"/>
+                    <input name="name" readonly="true" th:value="*{file.name}" type="text"/>
                     <td><input type="submit" value="Delete"/></td>
                 </table>
             </form>
