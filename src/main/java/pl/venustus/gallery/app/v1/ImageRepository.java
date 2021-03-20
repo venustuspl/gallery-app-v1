@@ -8,5 +8,4 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
 	Image findFirstByName(String text);
 
-	void deleteByName(String text);
 }

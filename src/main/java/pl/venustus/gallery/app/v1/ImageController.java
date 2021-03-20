@@ -35,13 +35,20 @@ public class ImageController {
 						.fromMethodName(ImageController.class, "serveFile", path.getFileName().toString()).build()
 						.toString())
 				.collect(Collectors.toList());
-
+		if (!stringss.isEmpty())
+			System.out.println(stringss.get(0));
 		model.addAttribute("files", stringss);
 
 		List<Image> stringss1 = imageRepository.findAll().stream()
-
+				.map(i -> new Image(this.rootLocation.resolve(i.getName()).toString()))
+				.map(i -> new Image(MvcUriComponentsBuilder
+						.fromMethodName(ImageController.class, "serveFile", this.rootLocation.resolve(i.getName())
+								.getFileName().toString())
+						.build()
+						.toString()))
 				.collect(Collectors.toList());
-
+		if (!stringss1.isEmpty())
+			System.out.println(stringss1.get(0).getName());
 		model.addAttribute("files1", stringss1);
 
 		return "gallery";
@@ -80,11 +87,11 @@ public class ImageController {
 
 	@RequestMapping("/delete")
 	public String findPhotos(@RequestParam("text") String text) throws Exception {
-
+		System.out.println(text);
 		text = text.substring(text.lastIndexOf("/"));
 		text = this.rootLocation + text;
 
-		imageRepository.deleteById(imageRepository.findByName(text));
+		//imageRepository.delete(imageRepository.findByName(text));
 
 		return "redirect:/";
 
