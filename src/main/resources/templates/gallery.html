@@ -29,22 +29,6 @@ div.gallery img {
     <link href="/ekko-lightbox.css" rel="stylesheet"></link>
 </head>
 <body>
-
-<nav
-        class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-    <button aria-controls="navbarCollapse" aria-expanded="false"
-            aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"
-            data-target="#navbarCollapse" data-toggle="collapse"
-            type="button">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a align="center" class="navbar-brand" href="/">My Photos</a>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-
-
-    </div>
-</nav>
-
 <div align="center">
     <form action="/" enctype="multipart/form-data" method="POST">
         <table>
@@ -63,30 +47,28 @@ div.gallery img {
 </div>
 <div th:each="file : ${files1}">
     <div class="gallery">
-        <a data-toggle="lightbox" th:href="${file.url}" th:title="*{file.name}"> <img height="200"
-                                                                                      th:src="${file.url}"/>
-
+        <a data-toggle="lightbox" th:href="${file.url}" th:title="*{file.name}">
+            <img height="200" th:src="${file.url}"/>
         </a>
-        <div>
+        <div style=" background-color: #fefbd8; align: center;">
             <form action="/delete" method="POST">
-                <table>
-                    <input name="id" readonly="true" th:value="*{file.id}" type="text"/>
-                    <input name="name" readonly="true" th:value="*{file.name}" type="text"/>
-                    <input name="url" readonly="true" th:value="*{file.url}" type="text"/>
-                    <td><input type="submit" value="Delete"/></td>
-                </table>
+                <input name="id" th:value="*{file.id}" type="hidden"/>
+                <input type="submit" value="[X]"/>
             </form>
+        </div>
+        <div>
+            <input name="name" readonly="true" style="width: 250px;" th:value="*{file.name}" type="text"/>
         </div>
     </div>
 </div>
-<script>	$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+<script>
+	$(document).on('click', '[data-toggle="lightbox"]', function(event) {
 	event.preventDefault();
 	$(this).ekkoLightbox({
                 alwaysShowClose: true
             });
-
-
 	});
+
 
 </script>
 </body>
