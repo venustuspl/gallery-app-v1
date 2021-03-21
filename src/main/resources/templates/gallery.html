@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta title="Gallery">
     <meta charset="utf-8"></meta>
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no"
           name="viewport"></meta>
@@ -60,27 +61,10 @@ div.gallery img {
         </table>
     </form>
 </div>
-
-<div th:each="file : ${files}">
-    <div class="gallery">
-        <a data-toggle="lightbox" th:href="${file}" th:title="*{file}"> <img height="200"
-                                                                             th:src="${file}"/>
-        </a>
-        <div>
-            <form action="/delete" method="POST">
-                <table>
-                    <input name="text" readonly="true" th:value="${file}" type="text"/>
-
-                    <td><input type="submit" value="Delete"/></td>
-                </table>
-            </form>
-        </div>
-    </div>
-</div>
 <div th:each="file : ${files1}">
     <div class="gallery">
-        <a data-toggle="lightbox" th:href="${file.name}" th:title="*{file.name}"> <img height="200"
-                                                                                       th:src="${file.name}"/>
+        <a data-toggle="lightbox" th:href="${file.url}" th:title="*{file.name}"> <img height="200"
+                                                                                      th:src="${file.url}"/>
 
         </a>
         <div>
@@ -88,7 +72,7 @@ div.gallery img {
                 <table>
                     <input name="id" readonly="true" th:value="*{file.id}" type="text"/>
                     <input name="name" readonly="true" th:value="*{file.name}" type="text"/>
-                    <input name="name" readonly="true" th:value="*{file.url}" type="text"/>
+                    <input name="url" readonly="true" th:value="*{file.url}" type="text"/>
                     <td><input type="submit" value="Delete"/></td>
                 </table>
             </form>

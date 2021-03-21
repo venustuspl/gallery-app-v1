@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class ImageController {
 	private final ImageRepository imageRepository;
 	private final Path rootLocation;
+	private static final String REDIRECT_TO_MAIN_PAGE = "redirect:/";
 
 	public ImageController(Path rootLocation, ImageRepository imageRepository) {
 		this.rootLocation = rootLocation;
@@ -28,26 +29,13 @@ public class ImageController {
 
 	@GetMapping("/")
 	public String listUploadedFiles(Model model) throws Exception {
-
-		List<String> stringss = imageRepository.findAll().stream()
-				.map(image -> this.rootLocation.resolve(image.getName()))
-				.map(path -> MvcUriComponentsBuilder
-						.fromMethodName(ImageController.class, "serveFile", path.getFileName().toString()).build()
-						.toString())
-				.collect(Collectors.toList());
-		if (!stringss.isEmpty())
-			System.out.println(stringss.get(0));
-		model.addAttribute("files", stringss);
-
 		List<Image> stringss1 = imageRepository.findAll().stream()
-				.map(i -> new Image(i.getId(), MvcUriComponentsBuilder
-						.fromMethodName(ImageController.class, "serveFile", this.rootLocation.resolve(i.getName())
+				.map(i -> new Image(i.getId(), i.getName(), MvcUriComponentsBuilder
+						.fromMethodName(ImageController.class, "serveFile", this.rootLocation.resolve(i.getUrl())
 								.getFileName().toString())
 						.build()
-						.toString(), i.getUrl()))
+						.toString()))
 				.collect(Collectors.toList());
-		if (!stringss1.isEmpty())
-			System.out.println(stringss1.get(0).getName());
 		model.addAttribute("files1", stringss1);
 
 		return "gallery";
@@ -70,29 +58,24 @@ public class ImageController {
 	) throws Exception {
 
 		if (file.getSize() == 0) {
-			return "redirect:/";
+			return REDIRECT_TO_MAIN_PAGE;
 		}
 
 		String imagePath = this.rootLocation.resolve(filename + ".jpg").toString();
 		System.out.println(imagePath);
 		List<Image> stringList = imageRepository.findAll();
-		stringList.add(new Image(imagePath, filename));
+		stringList.add(new Image(filename, imagePath));
 		Files.copy(file.getInputStream(), this.rootLocation.resolve(imagePath));
 
-		imageRepository.save(new Image(imagePath, filename));
+		imageRepository.save(new Image(filename, imagePath));
 
-		return "redirect:/";
+		return REDIRECT_TO_MAIN_PAGE;
 	}
 
 	@RequestMapping("/delete")
 	public String findPhotos(@RequestParam("id") Long id) throws Exception {
-//		System.out.println(text);
-//		text = text.substring(text.lastIndexOf("/"));
-//		text = this.rootLocation + text;
-		System.out.println(id);
 		imageRepository.deleteById(id);
 
-		return "redirect:/";
-
+		return REDIRECT_TO_MAIN_PAGE;
 	}
 }
