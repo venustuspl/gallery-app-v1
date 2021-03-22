@@ -48,14 +48,12 @@ div.gallery img {
 <div th:each="file : ${files1}">
     <div class="gallery">
         <a data-toggle="lightbox" th:href="${file.url}" th:title="*{file.name}">
-            <img height="200" th:src="${file.url}"/>
+            <img height="200" th:src="${file.thumbnailUrl}"/>
         </a>
-        <div style=" background-color: #fefbd8; align: center;">
             <form action="/delete" method="POST">
                 <input name="id" th:value="*{file.id}" type="hidden"/>
                 <input type="submit" value="[X]"/>
             </form>
-        </div>
         <div>
             <input name="name" readonly="true" style="width: 250px;" th:value="*{file.name}" type="text"/>
         </div>

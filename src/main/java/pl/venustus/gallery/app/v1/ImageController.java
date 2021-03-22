@@ -33,10 +33,20 @@ public class ImageController {
 	public String listUploadedFiles(Model model) throws Exception {
 		List<Image> stringss1 = imageRepository.findAll().stream()
 				.map(i -> new Image(i.getId(), i.getName(), MvcUriComponentsBuilder
-						.fromMethodName(ImageController.class, "serveFile", this.rootLocation.resolve(i.getUrl())
-								.getFileName().toString())
-						.build()
-						.toString()))
+								.fromMethodName(ImageController.class, "serveFile", this.rootLocation.resolve(i.getUrl())
+										.getFileName().toString())
+								.build()
+								.toString(),
+								MvcUriComponentsBuilder
+										.fromMethodName(ImageController.class, "serveFile", this.rootLocation.resolve(i.getThumbnailUrl())
+												.getFileName().toString())
+										.build()
+										.toString()
+
+
+						)
+
+				)
 				.collect(Collectors.toList());
 		model.addAttribute("files1", stringss1);
 
@@ -64,13 +74,14 @@ public class ImageController {
 		}
 
 		String imagePath = this.rootLocation.resolve(filename + ".jpg").toString();
+		String imageThumbnailPath = this.rootLocation.resolve(filename + "_thumbnail.jpg").toString();
 		List<Image> stringList = imageRepository.findAll();
-		stringList.add(new Image(filename, imagePath));
+		stringList.add(new Image(filename, imagePath, imageThumbnailPath));
 		Files.copy(file.getInputStream(), this.rootLocation.resolve(imagePath));
 
 		System.out.println(imagePath);
 		imageService.saveImageThumbnail(this.rootLocation, imagePath, filename);
-		imageRepository.save(new Image(filename, imagePath));
+		imageRepository.save(new Image(filename, imagePath, imageThumbnailPath));
 
 		return REDIRECT_TO_MAIN_PAGE;
 	}

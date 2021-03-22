@@ -15,18 +15,22 @@ public class Image {
 
 	private String url;
 
+	private String thumbnailUrl;
+
 	public Image() {
 	}
 
-	public Image(String name, String url) {
+	public Image(String name, String url, String thumbnailUrl) {
 		this.name = name;
 		this.url = url;
+		this.thumbnailUrl = thumbnailUrl;
 	}
 
-	public Image(Long id, String name, String url) {
+	public Image(Long id, String name, String url, String thumbnailUrl) {
 		this.id = id;
 		this.name = name;
 		this.url = url;
+		this.thumbnailUrl = thumbnailUrl;
 	}
 
 	public Long getId() {
@@ -53,12 +57,21 @@ public class Image {
 		this.url = url;
 	}
 
+	public String getThumbnailUrl() {
+		return thumbnailUrl;
+	}
+
+	public void setThumbnailUrl(String thumbnailUrl) {
+		this.thumbnailUrl = thumbnailUrl;
+	}
+
 	@Override
 	public String toString() {
 		return "Image{" +
 				"id=" + id +
 				", name='" + name + '\'' +
 				", url='" + url + '\'' +
+				", thumbnailUrl='" + thumbnailUrl + '\'' +
 				'}';
 	}
 }
