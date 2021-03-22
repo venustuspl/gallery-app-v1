@@ -20,11 +20,13 @@ import java.util.stream.Collectors;
 public class ImageController {
 	private final ImageRepository imageRepository;
 	private final Path rootLocation;
+	private final ImageService imageService;
 	private static final String REDIRECT_TO_MAIN_PAGE = "redirect:/";
 
-	public ImageController(Path rootLocation, ImageRepository imageRepository) {
+	public ImageController(Path rootLocation, ImageRepository imageRepository, ImageService imageService) {
 		this.rootLocation = rootLocation;
 		this.imageRepository = imageRepository;
+		this.imageService = imageService;
 	}
 
 	@GetMapping("/")
@@ -62,11 +64,12 @@ public class ImageController {
 		}
 
 		String imagePath = this.rootLocation.resolve(filename + ".jpg").toString();
-		System.out.println(imagePath);
 		List<Image> stringList = imageRepository.findAll();
 		stringList.add(new Image(filename, imagePath));
 		Files.copy(file.getInputStream(), this.rootLocation.resolve(imagePath));
 
+		System.out.println(imagePath);
+		imageService.saveImageThumbnail(this.rootLocation, imagePath, filename);
 		imageRepository.save(new Image(filename, imagePath));
 
 		return REDIRECT_TO_MAIN_PAGE;
