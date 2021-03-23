@@ -67,23 +67,26 @@ public class ImageController {
 
 	@PostMapping("/")
 	public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("filename") String filename, RedirectAttributes redirectAttributes
-	) throws Exception {
+			, Model model) throws Exception {
 
 		if (file.getSize() == 0) {
 			return REDIRECT_TO_MAIN_PAGE;
 		}
+		try {
+			String imagePath = this.rootLocation.resolve(filename + ".jpg").toString();
+			String imageThumbnailPath = this.rootLocation.resolve(filename + "_thumbnail.jpg").toString();
+			List<Image> stringList = imageRepository.findAll();
+			stringList.add(new Image(filename, imagePath, imageThumbnailPath));
+			Files.copy(file.getInputStream(), this.rootLocation.resolve(imagePath));
 
-		String imagePath = this.rootLocation.resolve(filename + ".jpg").toString();
-		String imageThumbnailPath = this.rootLocation.resolve(filename + "_thumbnail.jpg").toString();
-		List<Image> stringList = imageRepository.findAll();
-		stringList.add(new Image(filename, imagePath, imageThumbnailPath));
-		Files.copy(file.getInputStream(), this.rootLocation.resolve(imagePath));
-
-		System.out.println(imagePath);
-		imageService.saveImageThumbnail(this.rootLocation, imagePath, filename);
-		imageRepository.save(new Image(filename, imagePath, imageThumbnailPath));
-
-		return REDIRECT_TO_MAIN_PAGE;
+			System.out.println(imagePath);
+			imageService.saveImageThumbnail(this.rootLocation, imagePath, filename);
+			imageRepository.save(new Image(filename, imagePath, imageThumbnailPath));
+			return REDIRECT_TO_MAIN_PAGE;
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("innsertexception", e.getMessage());
+			return REDIRECT_TO_MAIN_PAGE;
+		}
 	}
 
 	@RequestMapping("/delete")

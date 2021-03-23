@@ -23,13 +23,14 @@ div.gallery img {
 }
 
     </style>
-
     <link href="/bootstrap.min.css" rel="stylesheet"></link>
     <link href="/navbar-top-fixed.css" rel="stylesheet"></link>
     <link href="/ekko-lightbox.css" rel="stylesheet"></link>
 </head>
 <body>
 <div align="center">
+    <div th:text="${innsertexception}"></div>
+
     <form action="/" enctype="multipart/form-data" method="POST">
         <table>
             <tr>
@@ -38,8 +39,7 @@ div.gallery img {
             </tr>
             <tr>
                 <td></td>
-                <input name="filename" type="text" value="File name"
-                />
+                <input name="filename" type="text" value="File name"/>
                 <td><input type="submit" value="Upload"/></td>
             </tr>
         </table>
@@ -66,8 +66,6 @@ div.gallery img {
                 alwaysShowClose: true
             });
 	});
-
-
 </script>
 </body>
 </html>
