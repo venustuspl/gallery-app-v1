@@ -8,10 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @SpringBootApplication
-public class GalleryAppV1Application {
-
+public class GalleryApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(GalleryAppV1Application.class, args);
+		SpringApplication.run(GalleryApplication.class, args);
 	}
 
 	@Bean

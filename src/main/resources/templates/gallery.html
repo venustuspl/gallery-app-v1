@@ -28,7 +28,8 @@ div.gallery img {
     <link href="/ekko-lightbox.css" rel="stylesheet"></link>
 </head>
 <body>
-<div align="center">
+<div>
+    <h1>Gallery</h1>
     <div th:text="${innsertexception}"></div>
 
     <form action="/" enctype="multipart/form-data" method="POST">
@@ -39,7 +40,7 @@ div.gallery img {
             </tr>
             <tr>
                 <td></td>
-                <input name="filename" type="text" value="File name"/>
+                File name: <input name="filename" type="text" value="Insert file name"/>
                 <td><input type="submit" value="Upload"/></td>
             </tr>
         </table>

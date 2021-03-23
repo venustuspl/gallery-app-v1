@@ -7,48 +7,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ImageController {
-	private final ImageRepository imageRepository;
 	private final Path rootLocation;
 	private final ImageService imageService;
 	private static final String REDIRECT_TO_MAIN_PAGE = "redirect:/";
 
-	public ImageController(Path rootLocation, ImageRepository imageRepository, ImageService imageService) {
+	public ImageController(Path rootLocation, ImageService imageService) {
 		this.rootLocation = rootLocation;
-		this.imageRepository = imageRepository;
 		this.imageService = imageService;
 	}
 
 	@GetMapping("/")
-	public String listUploadedFiles(Model model) throws Exception {
-		List<Image> stringss1 = imageRepository.findAll().stream()
-				.map(i -> new Image(i.getId(), i.getName(), MvcUriComponentsBuilder
-								.fromMethodName(ImageController.class, "serveFile", this.rootLocation.resolve(i.getUrl())
-										.getFileName().toString())
-								.build()
-								.toString(),
-								MvcUriComponentsBuilder
-										.fromMethodName(ImageController.class, "serveFile", this.rootLocation.resolve(i.getThumbnailUrl())
-												.getFileName().toString())
-										.build()
-										.toString()
-
-
-						)
-
-				)
-				.collect(Collectors.toList());
-		model.addAttribute("files1", stringss1);
+	public String listUploadedFiles(Model model) {
+		List<Image> images = imageService.loadAllImages(this.rootLocation);
+		model.addAttribute("files1", images);
 
 		return "gallery";
 	}
@@ -66,22 +45,12 @@ public class ImageController {
 	}
 
 	@PostMapping("/")
-	public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("filename") String filename, RedirectAttributes redirectAttributes
-			, Model model) throws Exception {
-
+	public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("filename") String filename, RedirectAttributes redirectAttributes, Model model) throws Exception {
 		if (file.getSize() == 0) {
 			return REDIRECT_TO_MAIN_PAGE;
 		}
 		try {
-			String imagePath = this.rootLocation.resolve(filename + ".jpg").toString();
-			String imageThumbnailPath = this.rootLocation.resolve(filename + "_thumbnail.jpg").toString();
-			List<Image> stringList = imageRepository.findAll();
-			stringList.add(new Image(filename, imagePath, imageThumbnailPath));
-			Files.copy(file.getInputStream(), this.rootLocation.resolve(imagePath));
-
-			System.out.println(imagePath);
-			imageService.saveImageThumbnail(this.rootLocation, imagePath, filename);
-			imageRepository.save(new Image(filename, imagePath, imageThumbnailPath));
+			imageService.saveImage(this.rootLocation, file, filename);
 			return REDIRECT_TO_MAIN_PAGE;
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("innsertexception", e.getMessage());
@@ -90,8 +59,8 @@ public class ImageController {
 	}
 
 	@RequestMapping("/delete")
-	public String findPhotos(@RequestParam("id") Long id) throws Exception {
-		imageRepository.deleteById(id);
+	public String findPhotos(@RequestParam("id") Long id) {
+		imageService.deleteImage(id);
 
 		return REDIRECT_TO_MAIN_PAGE;
 	}
