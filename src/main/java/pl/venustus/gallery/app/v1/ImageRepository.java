@@ -1,11 +1,11 @@
 package pl.venustus.gallery.app.v1;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ImageRepository extends JpaRepository<Image, Long> {
+import java.util.List;
 
-	Long findByName(String text);
-
-	Image findFirstByName(String text);
-
+@Repository
+public interface ImageRepository extends CrudRepository<Image, Long> {
+	List<Image> findAll();
 }
